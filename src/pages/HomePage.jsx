@@ -14,6 +14,18 @@ export default function () {
     const [priorityData, setPriorityData] = useState(null);
     const [departmentsData, setDepartmentsData] = useState(null);
     const [employeeData, setEmployeeData] = useState(null);
+    const getColor = (number) => {
+        switch (number) {
+            case 1:
+                return "bg-yellow";
+            case 2:
+                return "bg-orange";
+            case 3:
+                return "bg-pink";
+            default:
+                return "bg-blue";
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,36 +73,10 @@ export default function () {
                     <DropDown name="თანამშრომელი" type="empolyee" data={employeeData}></DropDown>
                 </div>
 
-                <div className="grid grid-cols-4 gap-13">
-                    {/*<div className="flex flex-col gap-[1.875rem]">*/}
-                    {/*    <div className="w-full py-[0.9375rem] rounded-[0.625rem] bg-yellow">*/}
-                    {/*        <h2 className="text-center text-xl font-medium text-white">დასაწყები</h2>*/}
-                    {/*    </div>*/}
-
-                    {/*    <Card></Card>*/}
-                    {/*</div>*/}
-
-                    {/*<div className="flex flex-col gap-[1.875rem]">*/}
-                    {/*    <div className="w-full py-[0.9375rem] rounded-[0.625rem] bg-orange">*/}
-                    {/*        <h2 className="text-center text-xl font-medium text-white">პროგრესში</h2>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
-                    {/*<div className="flex flex-col gap-[1.875rem]">*/}
-                    {/*    <div className="w-full py-[0.9375rem] rounded-[0.625rem] bg-pink">*/}
-                    {/*        <h2 className="text-center text-xl font-medium text-white">მზად ტესტირებისთვის</h2>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
-                    {/*<div className="flex flex-col gap-[1.875rem]">*/}
-                    {/*    <div className="w-full py-[0.9375rem] rounded-[0.625rem] bg-blue">*/}
-                    {/*        <h2 className="text-center text-xl font-medium text-white">დასრულებული</h2>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
+                <div className="grid grid-cols-4 gap-13 mt-10">
                     {statusesData && statusesData.map((item, index) => (
                         <div key={item.id} className="flex flex-col gap-[1.875rem]" data-id={item.id}>
-                            <div className="w-full py-[0.9375rem] rounded-[0.625rem] bg-blue">
+                            <div className={`w-full py-[0.9375rem] rounded-[0.625rem] ${getColor(item.id)}`}>
                                 <h2 className="text-center text-xl font-medium text-white">{item.name}</h2>
                             </div>
                             {tasksData && tasksData

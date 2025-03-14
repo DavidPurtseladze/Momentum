@@ -10,6 +10,10 @@
   --color-pink: #FF006E;
   --color-blue: #3A86FF;
   --color-light-gray: #DEE2E6;
+
+  --color-priority-high: #FA4D4D;
+  --color-priority-med: #FFBE0B;
+  --color-priority-low: #08A508;
 }
 
 h1 {
