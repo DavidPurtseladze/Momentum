@@ -3,7 +3,7 @@ import axios from 'axios';
 import Header from "../components/Header.jsx";
 import DropDown from "../components/DropDown.jsx";
 import Card from "../components/Card.jsx";
-import CheckBox from "../components/CheckBox.jsx";
+import PopUp from "../components/PopUp.jsx";
 
 export default function () {
     const APIKEY = import.meta.env.VITE_API_KEY;
@@ -85,13 +85,14 @@ export default function () {
                                     <Card key={task.id} data={task}></Card>
                                 ))
                             }
-
                         </div>
                     ))}
                 </div>
 
 
             </section>
+
+            <PopUp departamentData={departmentsData}></PopUp>
         </>
     );
 };

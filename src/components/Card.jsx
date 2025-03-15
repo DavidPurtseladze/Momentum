@@ -23,8 +23,6 @@ export default function DropDown(props) {
         });
     };
 
-    console.log(props.data)
-
     return (
         <div className="w-full p-5 rounded-[0.9375rem] border border-yellow">
 
