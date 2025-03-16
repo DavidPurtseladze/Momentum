@@ -4,11 +4,9 @@ import Header from "../components/Header.jsx";
 import DropDown from "../components/DropDown.jsx";
 import Card from "../components/Card.jsx";
 import PopUp from "../components/PopUp.jsx";
+import { APIURL, APIKEY } from "../config.js";
 
 export default function () {
-    const APIKEY = import.meta.env.VITE_API_KEY;
-    const APIURL = import.meta.env.VITE_API_URL;
-
     const [tasksData, setTasksData] = useState(null);
     const [statusesData, setStatusesData] = useState(null);
     const [priorityData, setPriorityData] = useState(null);

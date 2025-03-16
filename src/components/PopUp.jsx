@@ -1,13 +1,57 @@
-import React, { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import React, {Fragment, useEffect, useState} from 'react'
+import {Dialog, DialogBackdrop, DialogPanel} from '@headlessui/react'
 import close from '../assets/close.svg';
-import check from '../assets/check.svg';
 import Select from '../components/Select';
 import ImageInput from "./ImageInput.jsx";
-
+import Input from "./Input.jsx";
+import axios from "axios";
+import { APIURL, APIKEY } from "../config.js";
 
 export default function PopUp(props) {
     const [open, setOpen] = useState(true)
+    const [nameInput, setNameInput] = useState({ input: "", error: { min: null, max: null } });
+    const [surnameInput, setSurnameInput] = useState({ input: "", error: { min: null, max: null } });
+    const [image, setImage] = useState(null);
+    const [selected, setSelected] = useState(null)
+
+
+    useEffect(() => {
+        if (props.departamentData && props.departamentData.length > 0) {
+            setSelected(props.departamentData[0]);
+        }
+    }, [props.departamentData]);
+
+    const addUser = async () => {
+        const formData = new FormData();
+        formData.append("name", nameInput.input);
+        formData.append("surname", surnameInput.input);
+        formData.append("department_id", selected.id);
+
+        if (image) {
+            formData.append("avatar", image);
+        }
+
+
+        try {
+            const response = await axios.post(APIURL + "/employees", formData, {
+                headers: {
+                    "Authorization": `Bearer ${APIKEY}`,
+                    "Accept": "application/json",
+                    "Content-Type": "multipart/form-data",
+                    "Cache-Control": "no-cache, private",  // Add Cache-Control
+                    "X-Forwarded-Host": "https://momentum.redberryinternship.ge", // Forwarded Host Header
+                    "X-Cloud-Trace-Context": "422a6f318333a2649e57701ac704f56e", // Cloud Trace Context Header
+                    "Alt-Svc": 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000',
+                },
+            });
+
+            console.log("Employee added:", response.data);
+            setOpen(false);
+        } catch (error) {
+            console.error("Error:", error);
+            alert("დაფიქსირდა შეცდომა!"); // Show error message
+        }
+    };
 
     return (
         <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -36,46 +80,15 @@ export default function PopUp(props) {
                         </h2>
 
                         <div className="grid grid-cols-2 gap-11 mb-16 mt-11">
-                            <div>
-                                <label className="text-secondary-text text-sm font-medium"
-                                       htmlFor="name">სახელი*</label>
-                                <input className="w-full h-[2.625rem] rounded-md border-[#CED4DA] border" name="name"
-                                       id="name" type="text"/>
-
-                                <div className="flex items-center gap-0.5">
-                                    <img src={check} alt="Check"/>
-                                    <span className="text-[0.625rem] font-[350]">მინიმუმ 2 სიმბოლო</span>
-                                </div>
-                                <div className="flex items-center gap-0.5">
-                                    <img src={check} alt="Check"/>
-                                    <span className="text-[0.625rem] font-[350]">მინიმუმ 255 სიმბოლო</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="text-secondary-text text-sm font-medium"
-                                       htmlFor="surname">გვარი*</label>
-                                <input className="w-full h-[2.625rem] rounded-md border-[#CED4DA] border" name="surname"
-                                       id="surname" type="text"/>
-
-                                <div className="flex items-center gap-0.5">
-                                    <img src={check} alt="Check"/>
-                                    <span className="text-[0.625rem] font-[350]">მინიმუმ 2 სიმბოლო</span>
-                                </div>
-                                <div className="flex items-center gap-0.5">
-                                    <img src={check} alt="Check"/>
-                                    <span className="text-[0.625rem] font-[350]">მინიმუმ 255 სიმბოლო</span>
-                                </div>
-                            </div>
+                            <Input label="სახელი*" input="name" state={nameInput} setState={setNameInput}></Input>
+                            <Input label="გვარი*" input="surname" state={surnameInput} setState={setSurnameInput}></Input>
 
                             <div className="col-span-2">
-                                <label className="text-secondary-text text-sm font-medium"
-                                       htmlFor="image-input">ავატარი*</label>
-                                <ImageInput></ImageInput>
+                                <ImageInput state={image} setState={setImage}></ImageInput>
                             </div>
 
                             <div>
-                                <Select departamentData={props.departamentData}></Select>
+                                {selected !== null && (<Select state={selected} setState={setSelected} departamentData={props.departamentData}></Select>)}
                             </div>
                         </div>
 
@@ -83,7 +96,7 @@ export default function PopUp(props) {
                             <button type="button" onClick={() => setOpen(false)} className="py-2.5 px-4 text-base text-primary-text border border-purple rounded-md mr-5">
                                 გაუქმება
                             </button>
-                            <button type="button" onClick={() => setOpen(false)} className="py-2.5 px-4 text-base bg-purple text-white rounded-md">
+                            <button type="button" onClick={addUser} className="py-2.5 px-4 text-base bg-purple text-white rounded-md">
                                 დაამატე თანამშრომელი
                             </button>
                         </div>
