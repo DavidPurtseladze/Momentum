@@ -5,6 +5,7 @@ import DropDown from "../components/DropDown.jsx";
 import Card from "../components/Card.jsx";
 import PopUp from "../components/PopUp.jsx";
 import { APIURL, APIKEY } from "../config.js";
+import closeFilter from "../assets/close-filters.svg";
 
 export default function () {
     const [open, setOpen] = useState(false)
@@ -58,9 +59,6 @@ export default function () {
         fetchData();
     }, []);
 
-    console.log(tasksData)
-    console.log(filters)
-
     return (
         <>
             <Header openPopUp={open} setOpenPopUp={setOpen}></Header>
@@ -76,6 +74,23 @@ export default function () {
                     <DropDown name="პრიორიტეტი" type="priority" data={priorityData} filters={filters} setFilters={setFilters}></DropDown>
                     <DropDown name="თანამშრომელი" type="employee" data={employeeData} filters={filters} setFilters={setFilters}></DropDown>
                 </div>
+
+                {filters.length !== 0 &&
+                    <div className="flex gap-2 mt-6">
+                        {filters.map((filter, taskIndex) => (
+                            <span key={taskIndex} className="px-2.5 py-1.5 flex items-center gap-1 text-sm text-secondary-text border border-[#CED4DA] rounded-[2.5rem]">
+                                {filter.name}
+                                <img src={closeFilter} alt="Close"
+                                     onClick={() => setFilters((prev) =>
+                                         prev.filter((el) => el.id !== filter.id || el.type !== filter.type)
+                                     )}/>
+                            </span>
+                        ))}
+                        <span onClick={() => setFilters([])} className="cursor-pointer px-2.5 py-1.5 flex items-center gap-1 text-sm text-secondary-text">
+                            გასუფთავება
+                        </span>
+                    </div>
+                }
 
                 <div className="grid grid-cols-4 gap-13 mt-10">
                     {statusesData && statusesData.map((item, index) => (
@@ -103,7 +118,6 @@ export default function () {
                                         filters.some(f => f.type === "employee" && f.id === task.employee.id)
                                     )
                                     .map((task, taskIndex) => (
-
                                         <Card key={task.id} data={task} />
                                     ))
                             }

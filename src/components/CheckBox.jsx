@@ -9,7 +9,7 @@ const CheckBox = (props) => {
                        onChange={(e) =>
                            props.setFilters((prev) =>
                                e.target.checked
-                                   ? [...prev, { id: props.item.id, type: props.type }]
+                                   ? [...prev, { id: props.item.id, type: props.type, name: props.item.name }]
                                    : prev.filter((el) => el.id !== props.item.id || el.type !== props.type)
                            )
                        }/>
