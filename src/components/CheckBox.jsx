@@ -4,7 +4,15 @@ const CheckBox = (props) => {
     return (
         <>
             <label className="flex leading-6 gap-[0.9375rem] items-center text-primary-text" htmlFor={props.type + "-" + props.item.id}>
-                <input className="hidden peer" type="checkbox" id={props.type + "-" + props.item.id} name={props.type + "-" + props.item.id} value={props.type + "-" + props.item.id}/>
+                <input className="hidden peer" type="checkbox" id={props.type + "-" + props.item.id} name={props.type + "-" + props.item.id} value={props.type + "-" + props.item.id}
+                       checked={props.filters.some((el) => el.id === props.item.id && el.type === props.type)}
+                       onChange={(e) =>
+                           props.setFilters((prev) =>
+                               e.target.checked
+                                   ? [...prev, { id: props.item.id, type: props.type }]
+                                   : prev.filter((el) => el.id !== props.item.id || el.type !== props.type)
+                           )
+                       }/>
 
                 <div className="w-[1.375rem] h-[1.375rem] rounded-md border border-purple flex justify-center items-center [&>*]:hidden peer-checked:[&>*]:block">
                     <svg className="w-2.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10" fill="none">

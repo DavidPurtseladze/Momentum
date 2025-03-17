@@ -21,7 +21,7 @@ export default function DropDown(props) {
             >
                 <div className="flex flex-col gap-5">
                     {props.data && props.data.map((item, index) => (
-                        <CheckBox key={item.id} item={item} type={props.type}></CheckBox>
+                        <CheckBox key={item.id} item={item} type={props.type}  filters={props.filters} setFilters={props.setFilters}></CheckBox>
                     ))}
 
                     <button className="ml-auto w-fit bg-purple text-white py-2 px-12 rounded-[1.25rem]">არჩევა</button>

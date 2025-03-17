@@ -8,12 +8,10 @@ import axios from "axios";
 import { APIURL, APIKEY } from "../config.js";
 
 export default function PopUp(props) {
-    const [open, setOpen] = useState(true)
     const [nameInput, setNameInput] = useState({ input: "", error: { min: null, max: null } });
     const [surnameInput, setSurnameInput] = useState({ input: "", error: { min: null, max: null } });
     const [image, setImage] = useState(null);
     const [selected, setSelected] = useState(null)
-
 
     useEffect(() => {
         if (props.departamentData && props.departamentData.length > 0) {
@@ -26,11 +24,7 @@ export default function PopUp(props) {
         formData.append("name", nameInput.input);
         formData.append("surname", surnameInput.input);
         formData.append("department_id", selected.id);
-
-        if (image) {
-            formData.append("avatar", image);
-        }
-
+        formData.append("avatar", image);
 
         try {
             const response = await axios.post(APIURL + "/employees", formData, {
@@ -38,15 +32,11 @@ export default function PopUp(props) {
                     "Authorization": `Bearer ${APIKEY}`,
                     "Accept": "application/json",
                     "Content-Type": "multipart/form-data",
-                    "Cache-Control": "no-cache, private",  // Add Cache-Control
-                    "X-Forwarded-Host": "https://momentum.redberryinternship.ge", // Forwarded Host Header
-                    "X-Cloud-Trace-Context": "422a6f318333a2649e57701ac704f56e", // Cloud Trace Context Header
-                    "Alt-Svc": 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000',
                 },
             });
 
             console.log("Employee added:", response.data);
-            setOpen(false);
+            props.setOpen(false);
         } catch (error) {
             console.error("Error:", error);
             alert("დაფიქსირდა შეცდომა!"); // Show error message
@@ -54,7 +44,7 @@ export default function PopUp(props) {
     };
 
     return (
-        <Dialog open={open} onClose={setOpen} className="relative z-10">
+        <Dialog open={props.open} onClose={props.setOpen} className="relative z-10">
             <DialogBackdrop
                 transition
                 className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
@@ -70,7 +60,7 @@ export default function PopUp(props) {
                          data-leave:ease-in sm:px-[3.125rem] pb-15 pt-10 sm:w-full sm:max-w-[57.5rem] data-closed:sm:translate-y-0 data-closed:sm:scale-95"
                     >
                         <div className="w-full flex justify-end">
-                            <button type="button" onClick={() => setOpen(false)}>
+                            <button type="button" onClick={() => props.setOpen(false)}>
                                 <img src={close} alt="Close Popup"/>
                             </button>
                         </div>
@@ -93,7 +83,7 @@ export default function PopUp(props) {
                         </div>
 
                         <div className="w-full flex justify-end">
-                            <button type="button" onClick={() => setOpen(false)} className="py-2.5 px-4 text-base text-primary-text border border-purple rounded-md mr-5">
+                            <button type="button" onClick={() => props.setOpen(false)} className="py-2.5 px-4 text-base text-primary-text border border-purple rounded-md mr-5">
                                 გაუქმება
                             </button>
                             <button type="button" onClick={addUser} className="py-2.5 px-4 text-base bg-purple text-white rounded-md">

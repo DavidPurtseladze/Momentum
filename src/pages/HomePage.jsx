@@ -7,11 +7,14 @@ import PopUp from "../components/PopUp.jsx";
 import { APIURL, APIKEY } from "../config.js";
 
 export default function () {
+    const [open, setOpen] = useState(false)
     const [tasksData, setTasksData] = useState(null);
     const [statusesData, setStatusesData] = useState(null);
     const [priorityData, setPriorityData] = useState(null);
     const [departmentsData, setDepartmentsData] = useState(null);
     const [employeeData, setEmployeeData] = useState(null);
+    const [filters, setFilters] = useState([]);
+
     const getColor = (number) => {
         switch (number) {
             case 1:
@@ -55,9 +58,12 @@ export default function () {
         fetchData();
     }, []);
 
+    console.log(tasksData)
+    console.log(filters)
+
     return (
         <>
-            <Header></Header>
+            <Header openPopUp={open} setOpenPopUp={setOpen}></Header>
 
             <section className="max-w-[105rem] w-full mx-auto mt-10">
                 <h1>
@@ -66,9 +72,9 @@ export default function () {
 
 
                 <div className="mt-13 max-w-[43rem] relative flex justify-between rounded-[0.625rem] border border-light-gray">
-                    <DropDown name="დეპარტამენტი" type="departament" data={departmentsData}></DropDown>
-                    <DropDown name="პრიორიტეტი" type="priority" data={priorityData}></DropDown>
-                    <DropDown name="თანამშრომელი" type="empolyee" data={employeeData}></DropDown>
+                    <DropDown name="დეპარტამენტი" type="department" data={departmentsData} filters={filters} setFilters={setFilters}></DropDown>
+                    <DropDown name="პრიორიტეტი" type="priority" data={priorityData} filters={filters} setFilters={setFilters}></DropDown>
+                    <DropDown name="თანამშრომელი" type="employee" data={employeeData} filters={filters} setFilters={setFilters}></DropDown>
                 </div>
 
                 <div className="grid grid-cols-4 gap-13 mt-10">
@@ -77,12 +83,31 @@ export default function () {
                             <div className={`w-full py-[0.9375rem] rounded-[0.625rem] ${getColor(item.id)}`}>
                                 <h2 className="text-center text-xl font-medium text-white">{item.name}</h2>
                             </div>
-                            {tasksData && tasksData
-                                .filter(task => task.status.id === item.id)
-                                .map((task, taskIndex) => (
-                                    <Card key={task.id} data={task}></Card>
-                                ))
+
+                            {tasksData &&
+                                tasksData
+                                    .filter(task => task.status.id === item.id)
+                                    .filter(task =>
+                                        filters.length === 0 ||
+                                        !filters.some(f => f.type === "department") ||
+                                        filters.some(f => f.type === "department" && f.id === task.department.id)
+                                    )
+                                    .filter(task =>
+                                        filters.length === 0 ||
+                                        !filters.some(f => f.type === "priority") ||
+                                        filters.some(f => f.type === "priority" && f.id === task.priority.id)
+                                    )
+                                    .filter(task =>
+                                        filters.length === 0 ||
+                                        !filters.some(f => f.type === "employee") ||
+                                        filters.some(f => f.type === "employee" && f.id === task.employee.id)
+                                    )
+                                    .map((task, taskIndex) => (
+
+                                        <Card key={task.id} data={task} />
+                                    ))
                             }
+
                         </div>
                     ))}
                 </div>
@@ -90,7 +115,7 @@ export default function () {
 
             </section>
 
-            <PopUp departamentData={departmentsData}></PopUp>
+            <PopUp open={open} setOpen={setOpen} departamentData={departmentsData}></PopUp>
         </>
     );
 };
