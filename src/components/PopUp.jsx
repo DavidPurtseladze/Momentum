@@ -78,12 +78,14 @@ export default function PopUp(props) {
                             </div>
 
                             <div>
-                                {selected !== null && (<Select state={selected} setState={setSelected} departamentData={props.departamentData}></Select>)}
+                                <label className="text-secondary-text text-sm font-medium mb-2">დეპარტამენტი*</label>
+                                {selected !== null && (<Select state={selected} setState={setSelected}
+                                                               departamentData={props.departamentData}></Select>)}
                             </div>
                         </div>
 
                         <div className="w-full flex justify-end">
-                            <button type="button" onClick={() => props.setOpen(false)} className="py-2.5 px-4 text-base text-primary-text border border-purple rounded-md mr-5">
+                        <button type="button" onClick={() => props.setOpen(false)} className="py-2.5 px-4 text-base text-primary-text border border-purple rounded-md mr-5">
                                 გაუქმება
                             </button>
                             <button type="button" onClick={addUser} className="py-2.5 px-4 text-base bg-purple text-white rounded-md">

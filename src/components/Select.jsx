@@ -4,8 +4,7 @@ import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@h
 export default function Select(props) {
     return (
         <Listbox value={props.state} onChange={props.setState}>
-            <Label className="block text-sm/6 font-medium text-gray-900">Assigned to</Label>
-            <div className="relative mt-2">
+            <div className="w-full relative">
                 <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 sm:text-sm/6">
                   <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
                     <span className="block truncate">{props.state.name}</span>
