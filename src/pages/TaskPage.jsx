@@ -6,6 +6,7 @@ import axios from "axios";
 import pieChart from '../assets/pie-chart.svg';
 import user from '../assets/user.svg';
 import calendar from '../assets/calendar.svg';
+import leftArrow from '../assets/left-arrow.svg';
 import Select from "../components/Select.jsx";
 
 export default function TaskPage() {
@@ -14,6 +15,7 @@ export default function TaskPage() {
     const [statusesData, setStatusesData] = useState(null);
     const [currentStatus, setCurrentStatus] = useState(null);
     const [commentText, setCommentText] = useState("");
+    const [comments, setComments] = useState("");
     const { taskId } = useParams();
 
     useEffect(() => {
@@ -168,6 +170,25 @@ export default function TaskPage() {
                         type="text" placeholder="დაწერე კომენტარი" value={commentText} onChange={handleCommentChange} />
                     <button className="absolute right-4 bottom-4 rounded-[1.25rem] py-2 px-5 text-base text-white bg-purple" onClick={handleCommentSubmit}>
                         დააკომენტარე
+                    </button>
+                </div>
+
+                <div className="flex items-center mt-16">
+                    <h2 className="font-medium text-xl text-black">კომენტარები</h2>
+                    <span className="ml-2 bg-purple py-0.5 px-2.5 rounded-full text-sm text-white">3</span>
+                </div>
+
+                <div>
+                    <div className="mt-10 flex gap-3">
+                        <img className="w-10 h-10 object-cover rounded-full" src="https://momentum.redberryinternship.ge/storage/employee-avatars/uJpL0xmRKymSAmG59YAIdYzeRJsqWA7Q54iYZaV0.jpg" alt="Avatar"/>
+                        <div>
+                            <h3 className="text-lg font-medium text-primary-text">ემილია მორგანი</h3>
+                            <p className="mt-2 text-base font-[350] text-secondary-text">დიზაინი სუფთად ჩანს, მაგრამ კოდირებისას მნიშვნელოვანი იქნება, რომ ელემენტებს ჰქონდეს შესაბამისი რეზოლუცია.</p>
+                        </div>
+                    </div>
+                    <button className="mt-4 flex items-center gap-1.5 text-purple">
+                        <img src={leftArrow} alt="Arrow"/>
+                        უპასუხე
                     </button>
                 </div>
             </div>
