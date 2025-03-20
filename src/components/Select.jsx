@@ -1,15 +1,17 @@
 import React from 'react'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import arrowDown from "../assets/arrow-down.svg";
 
 export default function Select(props) {
     return (
         <Listbox value={props.state} onChange={props.setState}>
             <div className="w-full relative">
-                <ListboxButton className="grid h-11 w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 sm:text-sm/6">
-                    <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+                <ListboxButton className="grid h-11 w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 px-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 sm:text-sm/6">
+                    <span className="col-start-1 row-start-1 flex items-center gap-3">
                         { props.state.icon !== undefined && <img src={props.state.icon} alt="Icon"/> }
                         { props.state.avatar !== undefined && <img className="w-7 h-7 object-cover rounded-full" src={props.state.avatar} alt="Icon"/> }
                         <span className="block truncate">{props.state.name} {props.state.surname !== undefined && props.state.surname}</span>
+                        <img className='ml-auto' src={arrowDown} alt="Arrow Down" />
                     </span>
                 </ListboxButton>
                 <ListboxOptions
