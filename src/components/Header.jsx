@@ -12,7 +12,7 @@ export default function Header(props) {
             <div>
                 <button className="py-2.5 px-5 text-base text-primary-text border border-purple rounded-md mr-10" onClick={() => props.setOpenPopUp(true)}>თანამშრომლის შექმნა</button>
                 <Link to="/create-task">
-                    <button className="py-2.5 px-5 text-base bg-purple text-white rounded-md">+ შექმენი ახალი დავალება</button>
+                    <button className="py-2.5 px-5 text-base bg-purple hover:bg-light-purple duration-300 text-white rounded-md">+ შექმენი ახალი დავალება</button>
                 </Link>
             </div>
         </header>

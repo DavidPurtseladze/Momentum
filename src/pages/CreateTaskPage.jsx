@@ -198,7 +198,7 @@ export default function CreateTaskPage() {
                                           setSelectedDate={setSelectedDate}></CustomDatePicker>
                     </div>
                     <div className="w-[82.5rem] flex justify-end mt-[8.75rem]">
-                        <button onClick={handleCreateTask} className="py-2.5 px-5 text-base bg-purple text-white rounded-md">დავალების შექმნა</button>
+                        <button onClick={handleCreateTask} className="py-2.5 px-5 text-base bg-purple hover:bg-light-purple duration-300 text-white rounded-md">დავალების შექმნა</button>
                     </div>
                 </div>
 

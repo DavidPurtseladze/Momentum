@@ -24,7 +24,7 @@ export default function DropDown(props) {
                         <CheckBox key={item.id} item={item} type={props.type}  filters={props.filters} setFilters={props.setFilters}></CheckBox>
                     ))}
 
-                    <button className="ml-auto w-fit bg-purple text-white py-2 px-12 rounded-[1.25rem]">არჩევა</button>
+                    <button className="ml-auto w-fit bg-purple hover:bg-light-purple duration-300 text-white py-2 px-12 rounded-[1.25rem]">არჩევა</button>
 
                 </div>
             </MenuItems>

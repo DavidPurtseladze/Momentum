@@ -231,7 +231,7 @@ export default function TaskPage() {
                         className="outline-0 resize-none w-full h-[8.4375rem] bg-white text-sm font-[350] px-5 py-7 border border-[#ADB5BD] rounded-[0.625rem]"
                         type="text" placeholder="დაწერე კომენტარი" value={commentText} onChange={handleCommentChange}/>
                         <button
-                            className="absolute right-4 bottom-4 rounded-[1.25rem] py-2 px-5 text-base text-white bg-purple"
+                            className="absolute right-4 bottom-4 rounded-[1.25rem] py-2 px-5 text-base text-white bg-purple hover:bg-light-purple duration-300"
                             onClick={() => handleCommentSubmit(false)}
                         >
                             დააკომენტარე
@@ -256,7 +256,7 @@ export default function TaskPage() {
                                     <p className="mt-2 text-base font-[350] text-secondary-text">{comment.text}</p>
                                 </div>
                             </div>
-                            <button className="ml-[3.125rem] mt-4 flex items-center gap-1.5 text-purple" onClick={() => handleReplyClick(comment.id)}>
+                            <button className="ml-[3.125rem] mt-4 flex items-center gap-1.5 text-purple text-light-purple duration-300" onClick={() => handleReplyClick(comment.id)}>
                                 <img src={leftArrow} alt="Arrow"/>
                                 უპასუხე
                             </button>
@@ -284,7 +284,7 @@ export default function TaskPage() {
                                         onChange={handleReplyCommentChange}
                                     />
                                     <button
-                                        className="absolute right-4 bottom-4 rounded-[1.25rem] py-2 px-5 text-base text-white bg-purple"
+                                        className="absolute right-4 bottom-4 rounded-[1.25rem] py-2 px-5 text-base text-white bg-purple hover:bg-light-purple duration-300e"
                                         onClick={() => handleCommentSubmit(true)}
                                     >
                                         დააკომენტარე

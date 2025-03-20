@@ -26,7 +26,7 @@ export default function DropDown(props) {
 
     return (
         <Link to={`/task/${props.data.id}`}>
-            <div className="w-full p-5 rounded-[0.9375rem] border border-yellow">
+            <div className={`w-full p-5 rounded-[0.9375rem] border ${props.data.status.id === 1 ? "border-yellow" : props.data.status.id === 2 ? "border-orange" : props.data.status.id === 3 ? "border-pink" : "border-blue"}`} >
                 <div className="flex items-center">
                     <div className={`w-fit rounded-sm flex gap-1 p-1 border font-medium text-xs leading-[150%] ${getColor(props.data.priority.id)}`}>
                         <img src={props.data.priority.icon} alt=""/>

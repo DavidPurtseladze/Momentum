@@ -103,7 +103,7 @@ export default function PopUp(props) {
                             <button type="button" onClick={() => props.setOpen(false)} className="py-2.5 px-4 text-base text-primary-text border border-purple rounded-md mr-5">
                                 გაუქმება
                             </button>
-                            <button type="button" onClick={addUser} className="py-2.5 px-4 text-base bg-purple text-white rounded-md">
+                            <button type="button" onClick={addUser} className="py-2.5 px-4 text-base hover:bg-light-purple duration-300 text-white rounded-md">
                                 დაამატე თანამშრომელი
                             </button>
                         </div>
