@@ -212,5 +212,34 @@ export const addTask = async (formData) => {
     }
 };
 
+/**
+ * Adds a comment to a specific task by sending a POST request to the API.
+ *
+ * This function submits a comment with the provided text. If it's a reply,
+ * it includes the parent comment ID. On success, it returns the response data.
+ * If an error occurs, it logs the error and returns false.
+ *
+ * @param {number} taskId - The ID of the task to which the comment belongs.
+ * @param {string} text - The content of the comment.
+ * @param {number|null} [replyId=null] - The ID of the parent comment if it's a reply (optional).
+ * @returns {Object|boolean} - The response data if successful, or false if an error occurs.
+ */
+export const addComment = async (taskId, text, replyId = null) => {
+    const payload = { text };
+    if (replyId)
+        payload.parent_id = replyId;
+
+    try {
+        const response = await axios.post(`${APIURL}/tasks/${taskId}/comments`, payload, {
+            headers: { Authorization: `Bearer ${APIKEY}` },
+        });
+
+        return response.data;
+    } catch (err) {
+        console.error("Error submitting comment:", err);
+        return false;
+    }
+};
+
 
 

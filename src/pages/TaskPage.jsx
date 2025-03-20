@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Header from "../components/Header.jsx";
 import { useParams } from "react-router-dom";
-import { APIURL, APIKEY } from "../config.js";
-import axios from "axios";
 import pieChart from '../assets/pie-chart.svg';
 import user from '../assets/user.svg';
 import calendar from '../assets/calendar.svg';
 import leftArrow from '../assets/left-arrow.svg';
 import Select from "../components/Select.jsx";
-import {getStatuses, getTaskComments, getTaskDetails, updateTaskStatus} from "../Api.js";
+import {addComment, getDepartments, getStatuses, getTaskComments, getTaskDetails, updateTaskStatus} from "../Api.js";
+import PopUp from "../components/PopUp.jsx";
 
 export default function TaskPage() {
     const [open, setOpen] = useState(false);
     const [task, setTask] = useState(null);
+    const [departmentsData, setDepartmentsData] = useState(null);
 
     const [statusesData, setStatusesData] = useState(null);
     const [currentStatus, setCurrentStatus] = useState(null);
@@ -34,12 +34,15 @@ export default function TaskPage() {
             const statuses = await getStatuses();
             setStatusesData(statuses);
             setCurrentStatus({
-                id: statuses[0]?.id,
-                name: statuses[0]?.name,
+                id: task.status.id,
+                name: task.status.name,
             });
 
             const comments = await getTaskComments(taskId);
             setComments(comments);
+
+            const departments = await getDepartments();
+            setDepartmentsData(departments);
         };
 
         if (taskId) fetchData();
@@ -90,28 +93,57 @@ export default function TaskPage() {
             return;
         }
 
-        try {
-            const payload = {
-                text,
-            };
+        if (isReply) {
+            const response = await addComment(taskId, text, replyId)
 
-            if (isReply && replyId) {
-                payload.parent_id = replyId;
-            }
+            if (!response) return;
 
-            await axios.post(`${APIURL}/tasks/${taskId}/comments`, payload, {
-                headers: { Authorization: `Bearer ${APIKEY}` },
+            setComments((prevComments) => {
+                const updatedComments = prevComments.map(comment => {
+                    if (comment.id === replyId) {
+                        if (!comment.sub_comments.some(subComment => subComment.id === response.id)) {
+                            return {
+                                ...comment,
+                                sub_comments: [
+                                    ...comment.sub_comments,
+                                    {
+                                        id: response.id,
+                                        text: response.text,
+                                        task_id: response.task_id,
+                                        parent_id: response.parent_id,
+                                        author_avatar: response.author_avatar,
+                                        author_nickname: response.author_nickname
+                                    }
+                                ]
+                            };
+                        }
+                    }
+                    return comment;
+                });
+                return updatedComments;
             });
 
-            if (isReply) {
-                setReplyComment(""); // Reset reply comment
-            } else {
-                setCommentText(""); // Reset main comment input
-            }
+            setReplyComment("");
+            setReplyId(null);
+        } else {
+            const response = await addComment(taskId, text)
 
-            console.log("Comment submitted successfully!");
-        } catch (err) {
-            console.error("Error submitting comment:", err);
+            if (!response) return;
+
+            setComments((prevComments) => [
+                {
+                    id: response.id,
+                    parent_id: null,
+                    text: response.text,
+                    task_id: response.task_id,
+                    author_avatar: response.author_avatar,
+                    author_nickname: response.author_nickname,
+                    sub_comments: []
+                },
+                ...prevComments,
+            ]);
+
+            setCommentText("");
         }
     };
 
@@ -208,8 +240,11 @@ export default function TaskPage() {
 
                     <div className="flex items-center mt-16">
                         <h2 className="font-medium text-xl text-black">კომენტარები</h2>
-                        <span className="ml-2 bg-purple py-0.5 px-2.5 rounded-full text-sm text-white">{comments.length}</span>
+                        <span className="ml-2 bg-purple py-0.5 px-2.5 rounded-full text-sm text-white">
+                             {Array.isArray(comments) ? comments.reduce((total, comment) => total + 1 + (comment.sub_comments ? comment.sub_comments.length : 0), 0) : 0}
+                        </span>
                     </div>
+
                     {comments && comments.map((comment) => (
                         <div key={comment.id}>
                             <div className="mt-10 flex gap-3">
@@ -258,11 +293,10 @@ export default function TaskPage() {
                             )}
                         </div>
                     ))}
-
                 </div>
-
             </section>
 
+            <PopUp open={open} setOpen={setOpen} departamentData={departmentsData}></PopUp>
         </>
     );
 }

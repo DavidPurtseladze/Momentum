@@ -30,25 +30,21 @@ export default function () {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const statuses = await getStatuses();
-                setStatusesData(statuses);
+            const statuses = await getStatuses();
+            setStatusesData(statuses);
 
-                const priorities = await getPriorities();
-                setPriorityData(priorities);
+            const priorities = await getPriorities();
+            setPriorityData(priorities);
 
-                const departments = await getDepartments();
-                setDepartmentsData(departments);
+            const departments = await getDepartments();
+            setDepartmentsData(departments);
 
-                const employee = await getEmployees();
-                setEmployeeData(employee);
+            const employee = await getEmployees();
+            setEmployeeData(employee);
 
-                const tasks = await getTasks();
-                setTasksData(tasks);
+            const tasks = await getTasks();
+            setTasksData(tasks);
 
-            } catch (err) {
-
-            }
         };
 
         fetchData();
