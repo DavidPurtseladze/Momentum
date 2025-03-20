@@ -28,7 +28,7 @@ export default function Input(props) {
         <div>
             <label className="text-secondary-text text-sm font-medium"
                    htmlFor="name">{ props.label }</label>
-            <input className="w-full h-[2.625rem] text-sm font-light text-light-black rounded-md border-[#CED4DA] border outline-0 pl-[0.875rem]" name={props.input} id={props.input} type="text"
+            <input className="w-full h-[2.625rem] bg-white text-sm font-light text-light-black rounded-md border-[#CED4DA] border outline-0 pl-[0.875rem]" name={props.input} id={props.input} type="text"
                    value={props.state.input} onChange={(e) => validateInput(e.target.value)} />
 
             <div className="flex items-center gap-0.5">
