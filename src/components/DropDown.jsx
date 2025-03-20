@@ -4,7 +4,7 @@ import CheckBox from "./CheckBox.jsx";
 
 export default function DropDown(props) {
     return (
-        <Menu as="div" className="inline-block text-left">
+        <Menu as="div" className="inline-block h-fit text-left">
             <div>
                 <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900">
                     {props.name}

@@ -24,7 +24,7 @@ const CheckBox = (props) => {
                     <img src={props.item.avatar} className="w-7 h-7 rounded-full object-cover" alt="Profile Photo" />
                 ) : null}
 
-                {props.item.name}
+                {props.item.name}  {props.item.surname !== undefined && props.item.surname}
             </label>
         </>
     );

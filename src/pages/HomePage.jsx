@@ -60,7 +60,7 @@ export default function () {
                 </h1>
 
 
-                <div className="mt-13 max-w-[43rem] relative flex justify-between rounded-[0.625rem] border border-light-gray">
+                <div className="mt-13 h-11 max-w-[43rem] relative flex justify-between items-center rounded-[0.625rem] border border-light-gray">
                     <DropDown name="დეპარტამენტი" type="department" data={departmentsData} filters={filters} setFilters={setFilters}></DropDown>
                     <DropDown name="პრიორიტეტი" type="priority" data={priorityData} filters={filters} setFilters={setFilters}></DropDown>
                     <DropDown name="თანამშრომელი" type="employee" data={employeeData} filters={filters} setFilters={setFilters}></DropDown>
@@ -90,29 +90,27 @@ export default function () {
                                 <h2 className="text-center text-xl font-medium text-white">{item.name}</h2>
                             </div>
 
-                            {tasksData &&
-                                tasksData
-                                    .filter(task => task.status.id === item.id)
-                                    .filter(task =>
-                                        filters.length === 0 ||
-                                        !filters.some(f => f.type === "department") ||
-                                        filters.some(f => f.type === "department" && f.id === task.department.id)
-                                    )
-                                    .filter(task =>
-                                        filters.length === 0 ||
-                                        !filters.some(f => f.type === "priority") ||
-                                        filters.some(f => f.type === "priority" && f.id === task.priority.id)
-                                    )
-                                    .filter(task =>
-                                        filters.length === 0 ||
-                                        !filters.some(f => f.type === "employee") ||
-                                        filters.some(f => f.type === "employee" && f.id === task.employee.id)
-                                    )
-                                    .map((task, taskIndex) => (
-                                        <Card key={task.id} data={task} />
-                                    ))
+                            {tasksData && tasksData
+                                .filter(task => task.status.id === item.id)
+                                .filter(task =>
+                                    filters.length === 0 ||
+                                    !filters.some(f => f.type === "department") ||
+                                    filters.some(f => f.type === "department" && f.id === task.department.id)
+                                )
+                                .filter(task =>
+                                    filters.length === 0 ||
+                                    !filters.some(f => f.type === "priority") ||
+                                    filters.some(f => f.type === "priority" && f.id === task.priority.id)
+                                )
+                                .filter(task =>
+                                    filters.length === 0 ||
+                                    !filters.some(f => f.type === "employee") ||
+                                    filters.some(f => f.type === "employee" && f.id === task.employee.id)
+                                )
+                                .map((task, taskIndex) => (
+                                    <Card key={task.id} data={task} />
+                                ))
                             }
-
                         </div>
                     ))}
                 </div>

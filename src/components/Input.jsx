@@ -25,11 +25,11 @@ export default function Input(props) {
     };
 
     return (
-        <div>
+        <div className="mt-1">
             <label className="text-secondary-text text-sm font-medium"
                    htmlFor="name">{ props.label }</label>
-            <input className="w-full h-[2.625rem] bg-white text-sm font-light text-light-black rounded-md border-[#CED4DA] border outline-0 pl-[0.875rem]" name={props.input} id={props.input} type="text"
-                   value={props.state.input} onChange={(e) => validateInput(e.target.value)} />
+            <input className={`w-full h-[2.625rem] bg-white text-sm font-light text-light-black rounded-md border-[#CED4DA] border outline-0 pl-[0.875rem] ${(props.state.error.min === false || props.state.error.max === false) ? 'border-priority-high' : ''}`}
+                   name={props.input} id={props.input} type="text" value={props.state.input} onChange={(e) => validateInput(e.target.value)} />
 
             <div className="flex items-center gap-0.5">
                 {props.state.error.min === true && <img src={checkGreen} alt="Check"/>}

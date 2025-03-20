@@ -6,9 +6,6 @@ import TaskPage from "./pages/TaskPage.jsx";
 import CreateTaskPage from "./pages/CreateTaskPage.jsx";
 
 function App() {
-    const APIKEY = import.meta.env.VITE_API_KEY;
-    const APIURL = import.meta.env.VITE_API_URL;
-
     return (
         <>
             <Router>

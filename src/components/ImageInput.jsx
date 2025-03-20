@@ -7,13 +7,11 @@ export default function ImageInput(props) {
         const file = event.target.files[0];
 
         if (file) {
-            // Check if the file is an image
             if (!file.type.startsWith("image/")) {
                 alert("ატვირთეთ მხოლოდ სურათი");
                 return;
             }
 
-            // Check if the file size is greater than 600KB
             if (file.size > 600 * 1024) {
                 alert("ფაილის ზომა არ უნდა აღემატებოდეს 600KB-ს");
                 return;
@@ -21,22 +19,22 @@ export default function ImageInput(props) {
 
             const reader = new FileReader();
             reader.onloadend = () => {
-                props.setState(file);
+                props.setState({ image: file, error: null });
             };
             reader.readAsDataURL(file);
         }
     };
 
     const removeImage = () => {
-        props.setState(null);
+        props.setState({ image: null, error: null });
     };
 
     return (
         <>
             <label className="text-secondary-text text-sm font-medium"
                    htmlFor="image-input">ავატარი*</label>
-            <div className=" dp-dashed-border w-full h-[7.5rem] flex flex-col justify-center items-center">
-                {!props.state && (
+            <div className={`mt-1 dp-dashed-border w-full h-[7.5rem] flex flex-col justify-center items-center ${props.state.error ? 'error' : ''}`}>
+                {!props.state.image && (
                     <label className="cursor-pointer w-full h-full flex flex-col justify-center items-center">
                         <img src={uploadImage} alt="Upload Image"/>
                         <span className="font-sm text-secondary-text">ატვირთე ფოტო</span>
@@ -45,9 +43,9 @@ export default function ImageInput(props) {
                     </label>
                 )}
 
-                {props.state && (
+                {props.state.image && (
                     <div className="relative">
-                        <img src={URL.createObjectURL(props.state)} alt="Uploaded" className="w-22 h-22 object-cover rounded-full"/>
+                        <img src={URL.createObjectURL(props.state.image)} alt="Uploaded" className="w-22 h-22 object-cover rounded-full"/>
 
                         <button onClick={removeImage} className="absolute bottom-0 right-0 rounded-full">
                             <img src={trash} alt="Trash"/>
