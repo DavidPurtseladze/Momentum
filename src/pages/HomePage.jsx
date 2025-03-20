@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Header from "../components/Header.jsx";
 import DropDown from "../components/DropDown.jsx";
 import Card from "../components/Card.jsx";
 import PopUp from "../components/PopUp.jsx";
-import { APIURL, APIKEY } from "../config.js";
 import closeFilter from "../assets/close-filters.svg";
+import {getStatuses, getPriorities, getDepartments, getEmployees, getTasks} from "../Api.js";
 
 export default function () {
     const [open, setOpen] = useState(false)
@@ -32,24 +31,20 @@ export default function () {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseStatuses = await axios.get(APIURL + '/statuses');
-                setStatusesData(responseStatuses.data);
+                const statuses = await getStatuses();
+                setStatusesData(statuses);
 
-                const responsePriorities = await axios.get(APIURL + '/priorities');
-                setPriorityData(responsePriorities.data);
+                const priorities = await getPriorities();
+                setPriorityData(priorities);
 
-                const responseDepartments = await axios.get(APIURL + '/departments');
-                setDepartmentsData(responseDepartments.data);
+                const departments = await getDepartments();
+                setDepartmentsData(departments);
 
-                const responseEmployee = await axios.get(APIURL + '/employees', {
-                    headers: { Authorization: `Bearer ${APIKEY}` },
-                });
-                setEmployeeData(responseEmployee.data);
+                const employee = await getEmployees();
+                setEmployeeData(employee);
 
-                const responseTasks = await axios.get(APIURL + '/tasks', {
-                    headers: { Authorization: `Bearer ${APIKEY}` },
-                });
-                setTasksData(responseTasks.data);
+                const tasks = await getTasks();
+                setTasksData(tasks);
 
             } catch (err) {
 

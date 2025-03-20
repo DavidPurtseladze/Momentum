@@ -4,8 +4,7 @@ import close from '../assets/close.svg';
 import Select from '../components/Select';
 import ImageInput from "./ImageInput.jsx";
 import Input from "./Input.jsx";
-import axios from "axios";
-import { APIURL, APIKEY } from "../config.js";
+import {addEmployee} from "../Api.js";
 
 export default function PopUp(props) {
     const [nameInput, setNameInput] = useState({ input: "", error: { min: null, max: null } });
@@ -26,21 +25,8 @@ export default function PopUp(props) {
         formData.append("department_id", selected.id);
         formData.append("avatar", image);
 
-        try {
-            const response = await axios.post(APIURL + "/employees", formData, {
-                headers: {
-                    "Authorization": `Bearer ${APIKEY}`,
-                    "Accept": "application/json",
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            console.log("Employee added:", response.data);
-            props.setOpen(false);
-        } catch (error) {
-            console.error("Error:", error);
-            alert("დაფიქსირდა შეცდომა!"); // Show error message
-        }
+        await addEmployee(formData);
+        props.setOpen(false);
     };
 
     return (

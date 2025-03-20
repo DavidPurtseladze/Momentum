@@ -8,13 +8,15 @@ import user from '../assets/user.svg';
 import calendar from '../assets/calendar.svg';
 import leftArrow from '../assets/left-arrow.svg';
 import Select from "../components/Select.jsx";
-import Card from "../components/Card.jsx";
+import {getStatuses, getTaskComments, getTaskDetails, updateTaskStatus} from "../Api.js";
 
 export default function TaskPage() {
     const [open, setOpen] = useState(false);
     const [task, setTask] = useState(null);
+
     const [statusesData, setStatusesData] = useState(null);
     const [currentStatus, setCurrentStatus] = useState(null);
+
     const [commentText, setCommentText] = useState("");
     const [comments, setComments] = useState("");
 
@@ -26,53 +28,28 @@ export default function TaskPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await axios.get(`${APIURL}/tasks/${taskId}`, {
-                    headers: { Authorization: `Bearer ${APIKEY}` },
-                });
-                setTask(response.data);
+            const task = await getTaskDetails(taskId);
+            setTask(task);
 
-                const responseStatuses = await axios.get(`${APIURL}/statuses`);
-                setStatusesData(responseStatuses.data);
+            const statuses = await getStatuses();
+            setStatusesData(statuses);
+            setCurrentStatus({
+                id: statuses[0]?.id,
+                name: statuses[0]?.name,
+            });
 
-                setCurrentStatus({
-                    id: response.data.status.id,
-                    name: response.data.status.name,
-                });
-                console.log(response.data);
-
-                const commentsResponse = await axios.get(`${APIURL}/tasks/${taskId}/comments`, {
-                    headers: { Authorization: `Bearer ${APIKEY}` },
-                });
-                setComments(commentsResponse.data);
-                console.log(commentsResponse.data)
-            } catch (err) {
-                console.error("Error fetching data", err);
-            }
+            const comments = await getTaskComments(taskId);
+            setComments(comments);
         };
 
         if (taskId) fetchData();
     }, [taskId]);
 
     useEffect(() => {
-        if (currentStatus) {
-            updateTaskStatus();
-        }
-    }, [currentStatus]); // Runs whenever `currentStatus` changes
+        if (currentStatus === null) return;
 
-    const updateTaskStatus = async () => {
-        try {
-            await axios.put(`${APIURL}/tasks/${taskId}`, {
-                status_id: currentStatus.id,
-            }, {
-                headers: { Authorization: `Bearer ${APIKEY}` },
-            });
-
-            console.log("Task status updated successfully!");
-        } catch (err) {
-            console.error("Error updating task status:", err);
-        }
-    };
+        updateTaskStatus(taskId, currentStatus.id);
+    }, [currentStatus]);
 
     const handleReplyCommentChange = (e) => {
         setReplyComment(e.target.value);

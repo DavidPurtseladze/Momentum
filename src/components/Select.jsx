@@ -1,5 +1,5 @@
 import React from 'react'
-import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 
 export default function Select(props) {
     return (

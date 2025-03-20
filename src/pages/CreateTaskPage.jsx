@@ -4,10 +4,9 @@ import Input from "../components/Input.jsx";
 import checkGreen from "../assets/green-check.svg";
 import checkRed from "../assets/red-check.svg";
 import check from "../assets/check.svg";
-import axios from "axios";
-import {APIKEY, APIURL} from "../config.js";
 import Select from "../components/Select.jsx";
 import CustomDatePicker from "../components/DatePicker.jsx";
+import { addTask, getDepartments, getEmployees, getPriorities, getStatuses } from "../Api.js";
 
 export default function CreateTaskPage() {
     const [open, setOpen] = useState(false);
@@ -30,75 +29,50 @@ export default function CreateTaskPage() {
     const [descriptionInput, setDescriptionInput] = useState({ input: "", error: { min: null, max: null } });
 
     const handleCreateTask = async () => {
-        // Validate name and description before submitting
-        if (!nameInput.input.trim() || !descriptionInput.input.trim()) {
-            alert("გთხოვთ შეავსოთ ყველა ველი");
-            return;
-        }
+        const payload = {
+            name: nameInput.input,
+            description: descriptionInput.input,
+            due_date: selectedDate ? selectedDate.toISOString().split("T")[0] : null,
+            status_id: currentStatus ? currentStatus.id : null,
+            employee_id: currentEmployee ? currentEmployee.id : null,
+            priority_id: currentPriority ? currentPriority.id : null,
+        };
 
-        try {
-            const payload = {
-                name: nameInput.input,
-                description: descriptionInput.input,
-                due_date: selectedDate ? selectedDate.toISOString().split("T")[0] : null,
-                status_id: currentStatus ? currentStatus.id : null,
-                employee_id: currentEmployee ? currentEmployee.id : null,
-                priority_id: currentPriority ? currentPriority.id : null,
-            };
-
-            const response = await axios.post(`${APIURL}/tasks`, payload, {
-                headers: { Authorization: `Bearer ${APIKEY}` },
-            });
-
-            console.log("Task created successfully!", response.data);
-        } catch (err) {
-            console.error("Error creating task:", err);
-        }
+        await addTask(payload);
     };
 
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const responseStatuses = await axios.get(APIURL + '/statuses');
-                setStatusesData(responseStatuses.data);
+            const statuses = await getStatuses();
+            setStatusesData(statuses);
+            setCurrentStatus({
+                id: statuses[0]?.id,
+                name: statuses[0]?.name,
+            });
 
-                setCurrentStatus({
-                    id: responseStatuses.data[0].id,
-                    name: responseStatuses.data[0].name,
-                });
+            const priorities = await getPriorities();
+            setPriorityData(priorities);
+            setCurrentPriority({
+                id: priorities[0]?.id,
+                name: priorities[0]?.name,
+                icon: priorities[0]?.icon,
+            });
 
-                const responsePriorities = await axios.get(APIURL + '/priorities');
-                setPriorityData(responsePriorities.data);
+            const departments = await getDepartments();
+            setDepartmentsData(departments);
+            setCurrentDepartment({
+                id: departments[0]?.id,
+                name: departments[0]?.name,
+            });
 
-                setCurrentPriority({
-                    id: responsePriorities.data[0].id,
-                    name: responsePriorities.data[0].name,
-                    icon: responsePriorities.data[0].icon,
-                });
-
-                const responseDepartments = await axios.get(APIURL + '/departments');
-                setDepartmentsData(responseDepartments.data);
-
-                setCurrentDepartment({
-                    id: responseDepartments.data[0].id,
-                    name: responseDepartments.data[0].name,
-                });
-
-                const responseEmployee = await axios.get(APIURL + '/employees', {
-                    headers: { Authorization: `Bearer ${APIKEY}` },
-                });
-                setEmployeeData(responseEmployee.data);
-
-                setCurrentEmployee({
-                    id: responseEmployee.data[0].id,
-                    name: responseEmployee.data[0].name,
-                    avatar: responseEmployee.data[0].avatar,
-                });
-
-            } catch (err) {
-
-            }
+            const employees = await getEmployees();
+            setEmployeeData(employees);
+            setCurrentEmployee({
+                id: employees[0]?.id,
+                name: employees[0]?.name,
+                avatar: employees[0]?.avatar,
+            });
         };
 
         fetchData();
